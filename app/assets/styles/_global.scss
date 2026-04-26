@@ -1,0 +1,29 @@
+button {
+  cursor: pointer;
+}
+
+/* ─── Scroll Animate Directive ─── */
+.sa {
+  transition: opacity 0.65s ease, transform 0.65s ease;
+  will-change: opacity, transform;
+}
+
+.sa--fade-up    { opacity: 0; transform: translateY(48px); }
+.sa--fade-down  { opacity: 0; transform: translateY(-48px); }
+.sa--fade-left  { opacity: 0; transform: translateX(48px); }
+.sa--fade-right { opacity: 0; transform: translateX(-48px); }
+.sa--zoom-in    { opacity: 0; transform: scale(0.93); }
+.sa--fade       { opacity: 0; }
+
+.sa--visible {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.btn {
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  &:hover {
+    opacity: 0.8;
+  }
+}
