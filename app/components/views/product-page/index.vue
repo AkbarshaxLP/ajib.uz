@@ -4,6 +4,7 @@
     <main>
       <ProductHero />
       <ProductOverview />
+      <ProductKeySpecs />
       <div v-scroll-animate="'fade-up'">
         <ProductFeatures />
       </div>
@@ -25,6 +26,7 @@ import MainNewsletter from '../main-page/MainNewsletter.vue'
 import MainFooter from '../main-page/MainFooter.vue'
 import ProductHero from './ProductHero.vue'
 import ProductOverview from './ProductOverview.vue'
+import ProductKeySpecs from './ProductKeySpecs.vue'
 import ProductFeatures from './ProductFeatures.vue'
 import ProductDescription from './ProductDescription.vue'
 import ProductLifestyle from './ProductLifestyle.vue'

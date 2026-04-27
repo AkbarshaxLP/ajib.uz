@@ -101,6 +101,7 @@ const onSlideChange = (e: CustomEvent) => {
   .hero-arrow--left { left: 10px; }
   .hero-arrow--right { right: 10px; }
   .hero-dots { bottom: 14px; }
+  .hero-img { object-fit: contain; padding: 8px 0 ; background-color: #fff; }
 }
 @media (max-width: 480px) {
   .hero-wrap { height: 190px; }

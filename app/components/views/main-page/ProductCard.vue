@@ -47,8 +47,8 @@ const fallbackColor = computed(() => PLACEHOLDER_COLORS[(props.idx ?? 0) % PLACE
 
 <style scoped>
 .product-card {
-  flex: 0 0 auto; width: 180px; text-decoration: none;
-  background: #fff; border-radius: 16px; overflow: hidden;
+  flex: 0 0 auto; width: 100%; text-decoration: none;
+  background: #fff; border-radius: 20px; overflow: hidden;
   border: 1px solid #f0f0f0; transition: all 0.2s ease; cursor: pointer; display: block;
 }
 .product-card--hovered {
@@ -56,14 +56,14 @@ const fallbackColor = computed(() => PLACEHOLDER_COLORS[(props.idx ?? 0) % PLACE
   transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 }
 .product-card-img-wrap {
-  background: #f8f8f8; padding: 16px;
-  display: flex; align-items: center; justify-content: center; height: 160px;
+  background: #f8f8f8; padding: 24px;
+  display: flex; align-items: center; justify-content: center; height: 220px;
 }
 .product-card-img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s; }
 .product-card-fallback {
-  width: 100%; height: 100%; border-radius: 8px;
+  width: 100%; height: 100%; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
 }
-.product-card-info { padding: 12px 14px 14px; }
-.product-card-name { font-size: 13px; font-weight: 600; color: #111; }
+.product-card-info { padding: 16px 18px 18px; }
+.product-card-name { font-size: 15px; font-weight: 700; color: #111; }
 </style>

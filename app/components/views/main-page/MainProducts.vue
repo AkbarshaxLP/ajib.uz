@@ -6,20 +6,29 @@
           <p class="section-tag">Ajib Mobile</p>
           <h2 class="section-heading">Yangi Mahsulotlar</h2>
         </div>
-        <a href="#" class="see-all">
-          Barchasini ko'rish
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/>
-          </svg>
-        </a>
+        <div class="nav-btns">
+          <button
+            class="nav-btn"
+            :class="{ disabled: swiperApi.isBeginning.value }"
+            aria-label="Previous"
+            @click="swiperApi.prev()"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="15,18 9,12 15,6"/>
+            </svg>
+          </button>
+          <button
+            class="nav-btn"
+            :class="{ disabled: swiperApi.isEnd.value }"
+            aria-label="Next"
+            @click="swiperApi.next()"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="9,18 15,12 9,6"/>
+            </svg>
+          </button>
+        </div>
       </div>
-
-      <div class="swiper-outer">
-      <button class="scroll-btn scroll-btn--left" @click="prev()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round">
-          <polyline points="15,18 9,12 15,6"/>
-        </svg>
-      </button>
 
       <swiper-container ref="swiperEl" init="false" class="products-swiper">
         <swiper-slide
@@ -30,13 +39,6 @@
           <ProductCard :name="p.name" :img="p.img" :href="p.href" :idx="i" />
         </swiper-slide>
       </swiper-container>
-
-      <button class="scroll-btn scroll-btn--right" @click="next()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round">
-          <polyline points="9,18 15,12 9,6"/>
-        </svg>
-      </button>
-      </div>
     </div>
   </section>
 </template>
@@ -61,10 +63,18 @@ const AJIB_PRODUCTS = [
 
 const swiperEl = ref(null)
 
-const { next, prev } = useSwiper(swiperEl, {
-  slidesPerView: 'auto',
+const swiperApi = useSwiper(swiperEl, {
+  loop: false,
+  slidesPerView: 5,
   spaceBetween: 16,
   grabCursor: true,
+  breakpoints: {
+    0:    { slidesPerView: 1.5, spaceBetween: 12 },
+    480:  { slidesPerView: 2.2, spaceBetween: 14 },
+    768:  { slidesPerView: 3,   spaceBetween: 16 },
+    1024: { slidesPerView: 4,   spaceBetween: 16 },
+    1280: { slidesPerView: 5,   spaceBetween: 16 },
+  },
 })
 </script>
 
@@ -73,35 +83,24 @@ const { next, prev } = useSwiper(swiperEl, {
 
 .products-section { padding: 80px 0; border-bottom: 1px solid #f0f0f0; background: #fff; }
 
-.section-title { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
+.section-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
 .section-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #aaa; margin-bottom: 6px; }
 .section-heading { font-size: clamp(26px, 3vw, 36px); font-weight: 800; letter-spacing: -0.025em; }
-.see-all {
-  display: flex; align-items: center; gap: 4px;
-  font-size: 13px; font-weight: 600; color: #555; text-decoration: none; padding-bottom: 4px; transition: color 0.15s;
-}
-.see-all:hover { color: #111; }
 
-.swiper-outer { position: relative; }
+.nav-btns { display: flex; gap: 8px; }
+.nav-btn {
+  width: 40px; height: 40px; border-radius: 50%; border: none;
+  background: #111; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.2s, color 0.2s, opacity 0.15s;
+}
+.nav-btn:hover:not(.disabled) { opacity: 0.75; }
+.nav-btn.disabled { background: #ddd; color: #aaa; cursor: default; }
 
 .products-swiper { padding-top: 8px; padding-bottom: 16px; }
 
-:deep(swiper-slide).product-slide { width: auto; height: auto; }
-
-.scroll-btn {
-  position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
-  width: 40px; height: 40px; border-radius: 50%; background: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-  display: flex; align-items: center; justify-content: center; border: none; cursor: pointer;
-  transition: box-shadow 0.15s;
-}
-.scroll-btn:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
-.scroll-btn--left { left: 4px; }
-.scroll-btn--right { right: 4px; }
-
 @media (max-width: 768px) {
   .products-section { padding: 44px 0; }
-  .section-title { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 20px; }
-  .scroll-btn { display: none; }
+  .section-title { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
 }
 </style>
