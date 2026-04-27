@@ -101,6 +101,6 @@ const swiperApi = useSwiper(swiperEl, {
 
 @media (max-width: 768px) {
   .products-section { padding: 44px 0; }
-  .section-title { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+  .section-title { align-items: flex-start; gap: 12px; margin-bottom: 20px; }
 }
 </style>
