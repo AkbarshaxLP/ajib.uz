@@ -4,7 +4,7 @@
       <div class="footer-grid">
         <div v-for="col in FOOTER_COLS" :key="col.brand" class="footer-col">
           <p class="footer-col-title">{{ col.brand }}</p>
-          <a v-for="link in col.links" :key="link" href="#" class="footer-link">{{ link }}</a>
+          <a v-for="(link, li) in col.links" :key="link" :href="col.hrefs?.[li] ?? '#'" class="footer-link">{{ link }}</a>
         </div>
         <div class="footer-col">
           <p class="footer-col-title">Bog'lanish</p>
@@ -26,9 +26,21 @@
 
 <script setup lang="ts">
 const FOOTER_COLS = [
-  { brand: 'ajib mobile', links: ['Smartfonlar', 'Tugmali telefonlar', 'Hamkorlik uchun'] },
-  { brand: 'Corn mobile', links: ['Tarix', 'Servis markazlari', "Qo'shimcha kontaktlar", 'Blog'] },
-  { brand: 'Kompaniya haqida', links: ['Tarix', 'Servis markazlari', "Qo'shimcha kontaktlar", 'Blog'] },
+  {
+    brand: 'ajib mobile',
+    links: ['Smartfonlar', 'Tugmali telefonlar', 'Hamkorlik uchun'],
+    hrefs: ['/#products', '/#products', '#'],
+  },
+  {
+    brand: 'Corn mobile',
+    links: ['Tarix', 'Servis markazlari', "Qo'shimcha kontaktlar", 'Blog'],
+    hrefs: ['/tarix', '/servis', '#', '#'],
+  },
+  {
+    brand: 'Kompaniya haqida',
+    links: ['Tarix', 'Servis markazlari', "Qo'shimcha kontaktlar", 'Blog'],
+    hrefs: ['/tarix', '/servis', '#', '#'],
+  },
 ]
 </script>
 

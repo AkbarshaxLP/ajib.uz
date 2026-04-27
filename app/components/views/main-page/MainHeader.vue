@@ -2,7 +2,7 @@
   <header :class="['site-header', { scrolled }]">
     <div class="container header-inner">
       <!-- Logo -->
-      <a href="#" class="logo-link">
+      <a href="/" class="logo-link">
         <img
           v-if="!logoFailed"
           src="https://ajib.uz/wp-content/uploads/2024/09/logo-ajib-new.png"
@@ -157,7 +157,7 @@ const NAV_ITEMS = [
       { label: 'ajib Style', href: '#' }, { label: 'ajib Case', href: '#' },
       { label: 'ajib Class', href: '#' }, { label: 'ajib i1', href: '#' },
       { label: 'ajib i10 series', href: '#' }, { label: 'ajib i15 series', href: '#' },
-      { label: 'ajib i25 series', href: '#' }, { label: 'ajib 5010', href: '#' },
+      { label: 'ajib i25 series', href: '/products/i25' }, { label: 'ajib 5010', href: '#' },
       { label: 'ajib 3010', href: '#' }, { label: 'ajib 3011', href: '#' },
       { label: 'ajib 1030', href: '#' }, { label: 'ajib 1010', href: '#' },
     ],

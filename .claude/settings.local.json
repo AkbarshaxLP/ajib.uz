@@ -4,7 +4,17 @@
       "Bash(npm install:*)",
       "mcp__ide__getDiagnostics",
       "WebFetch(domain:api.anthropic.com)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Read(//c/Users/User/.claude/projects/D--WEB3-ajib-uz/57c462ac-b29f-49c9-b700-8f1f6a45dd07/tool-results/**)",
+      "Read(//c/Users/User/.claude/projects/D--WEB3-ajib-uz/57c462ac-b29f-49c9-b700-8f1f6a45dd07/tool-results//**)",
+      "Bash(cp /c/Users/User/.claude/projects/D--WEB3-ajib-uz/57c462ac-b29f-49c9-b700-8f1f6a45dd07/tool-results/webfetch-1777271149595-n8apll.bin /tmp/design.tar.gz)",
+      "Bash(cd /tmp)",
+      "Bash(gunzip -c design.tar.gz)",
+      "Bash(tar -xzf design.tar.gz)",
+      "Bash(npx nuxi:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/products/i25)",
+      "Bash(node:*)",
+      "WebFetch(domain:ajib.uz)"
     ],
     "deny": [],
     "ask": []
