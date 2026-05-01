@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<SidebarProps>(), {
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" as-child>
-            <a href="#">
+            <a href="/admin/dashboard">
               <div class="flex aspect-square size-12 items-center justify-center rounded-lg">
                 <!-- <component :is="data.head.logo" class="size-8" /> -->
                 <icon-svg-logo />

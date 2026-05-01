@@ -14,23 +14,23 @@ export const options = {
   navMain: [
     {
       title: 'Дашборд',
-      url: '#',
+      url: '/admin/dashboard',
       icon: SquareTerminal,
       isActive: true,
     },
     {
-      title: 'Список',
-      url: '#',
+      title: 'Продукты',
+      url: '/admin/products',
       icon: Bot,
     },
     {
-      title: 'Пользователи',
-      url: '#',
+      title: 'Главная страница',
+      url: '/admin/main-page',
       icon: BookOpen,
     },
     {
-      title: 'Отчеты',
-      url: '#',
+      title: 'Подвал',
+      url: '/admin/footer',
       icon: Settings2,
     },
   ],
