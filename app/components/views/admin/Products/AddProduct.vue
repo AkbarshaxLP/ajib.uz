@@ -129,7 +129,24 @@
                   </div>
                 </field-group>
                 <field-group label="Категория" required>
-                  <Input v-model.number="form.category" type="number" min="1" required />
+                  <Select
+                    :model-value="form.category ? String(form.category) : ''"
+                    @update:model-value="val => form.category = Number(val)"
+                    required
+                  >
+                    <SelectTrigger class="w-full">
+                      <SelectValue placeholder="Выберите категорию" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem
+                        v-for="cat in categories"
+                        :key="cat.id"
+                        :value="String(cat.id)"
+                      >
+                        {{ cat.name }}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </field-group>
               </div>
 
@@ -218,10 +235,11 @@
                   </div>
                 </field-group>
                 <field-group label="Баннер в подвале">
-                  <div class="relative">
-                    <Input v-model="form.footer_banner_image" placeholder="https://..." class="pl-8" />
-                    <Icon name="lucide:image" size="13" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/60" />
-                  </div>
+                  <image-upload-field
+                    :preview="footerBannerPreview"
+                    @change="onFooterBannerChange"
+                    @clear="clearFooterBanner"
+                  />
                 </field-group>
               </div>
             </div>
@@ -242,18 +260,11 @@
             </div>
             <div class="p-5 space-y-4">
               <field-group label="Фото hero" required>
-                <div class="flex gap-3">
-                  <div class="relative flex-1">
-                    <Input v-model="form.hero.photo" placeholder="https://cdn.example.com/hero.jpg" class="pl-8" required />
-                    <Icon name="lucide:image" size="13" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/60" />
-                  </div>
-                  <div
-                    v-if="form.hero.photo"
-                    class="w-9 h-9 rounded-md border border-border overflow-hidden shrink-0 bg-muted"
-                  >
-                    <img :src="form.hero.photo" class="w-full h-full object-cover" @error="(e: Event) => (e.target as HTMLImageElement).style.display='none'" />
-                  </div>
-                </div>
+                <image-upload-field
+                  :preview="heroPhotoPreview"
+                  @change="onHeroPhotoChange"
+                  @clear="clearHeroPhoto"
+                />
               </field-group>
               <field-group label="Описание hero" required>
                 <textarea
@@ -282,15 +293,11 @@
             </div>
             <div class="p-5 space-y-4">
               <field-group label="Изображение" required>
-                <div class="flex gap-3">
-                  <div class="relative flex-1">
-                    <Input v-model="form.middle_banner.image" placeholder="https://..." class="pl-8" required />
-                    <Icon name="lucide:image" size="13" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/60" />
-                  </div>
-                  <div v-if="form.middle_banner.image" class="w-9 h-9 rounded-md border overflow-hidden shrink-0 bg-muted">
-                    <img :src="form.middle_banner.image" class="w-full h-full object-cover" @error="(e: Event) => (e.target as HTMLImageElement).style.display='none'" />
-                  </div>
-                </div>
+                <image-upload-field
+                  :preview="middleBannerPreview"
+                  @change="onMiddleBannerChange"
+                  @clear="clearMiddleBanner"
+                />
               </field-group>
               <field-group label="Заголовок" required>
                 <Input v-model="form.middle_banner.title" placeholder="Заголовок баннера" required />
@@ -326,35 +333,21 @@
             <div class="p-5 space-y-4">
               <field-group label="Фото галерея">
                 <div class="space-y-2">
-                  <div class="flex gap-2">
-                    <div class="relative flex-1">
-                      <Input
-                        v-model="photoInput"
-                        placeholder="https://cdn.example.com/photo.jpg"
-                        class="pl-8"
-                        @keydown.enter.prevent="addPhoto"
-                      />
-                      <Icon name="lucide:image" size="13" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/60" />
-                    </div>
-                    <button
-                      type="button"
-                      @click="addPhoto"
-                      class="inline-flex items-center gap-1.5 px-3 h-9 rounded-md border border-input bg-background text-sm hover:bg-muted transition-colors shrink-0"
-                    >
-                      <Icon name="lucide:plus" size="14" />
-                      Добавить
-                    </button>
-                  </div>
-                  <div v-if="form.characteristics.photos.length" class="flex flex-wrap gap-2">
+                  <label class="flex items-center justify-center gap-2 w-full h-14 rounded-lg border-2 border-dashed border-border hover:border-primary/50 cursor-pointer transition-colors bg-muted/20 text-muted-foreground hover:text-foreground">
+                    <Icon name="lucide:plus" size="16" />
+                    <span class="text-sm">Добавить фото</span>
+                    <input type="file" accept="image/*" multiple class="sr-only" @change="addGalleryFiles" />
+                  </label>
+                  <div v-if="gallery.length" class="flex flex-wrap gap-2">
                     <div
-                      v-for="(photo, i) in form.characteristics.photos"
+                      v-for="(item, i) in gallery"
                       :key="i"
                       class="group relative w-14 h-14 rounded-lg border border-border overflow-hidden bg-muted"
                     >
-                      <img :src="photo" class="w-full h-full object-cover" @error="(e: Event) => (e.target as HTMLImageElement).style.display='none'" />
+                      <img :src="item.preview" class="w-full h-full object-cover" />
                       <button
                         type="button"
-                        @click="form.characteristics.photos.splice(i, 1)"
+                        @click="removeGalleryItem(i)"
                         class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                       >
                         <Icon name="lucide:x" size="14" class="text-white" />
@@ -481,15 +474,11 @@
               </Transition>
 
               <field-group label="Фото" required>
-                <div class="flex gap-3">
-                  <div class="relative flex-1">
-                    <Input v-model="form.parametrs.data.photo" placeholder="https://..." class="pl-8" required />
-                    <Icon name="lucide:image" size="13" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/60" />
-                  </div>
-                  <div v-if="form.parametrs.data.photo" class="w-9 h-9 rounded-md border overflow-hidden shrink-0 bg-muted">
-                    <img :src="form.parametrs.data.photo" class="w-full h-full object-cover" @error="(e: Event) => (e.target as HTMLImageElement).style.display='none'" />
-                  </div>
-                </div>
+                <image-upload-field
+                  :preview="parametrsPhotoPreview"
+                  @change="onParametrsPhotoChange"
+                  @clear="clearParametrsPhoto"
+                />
               </field-group>
 
               <div class="space-y-2">
@@ -542,9 +531,13 @@
 <script setup lang="ts">
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const props = defineProps<{ id?: string | number }>()
 const isEdit = computed(() => !!props.id)
+
+const { data: categoriesData } = useApiService().Dictionary.CategoryController_findAll()
+const categories = computed(() => (categoriesData.value as any[] | null) ?? [])
 
 /* ───── inline sub-components ───── */
 
@@ -588,6 +581,46 @@ const ToggleSwitch = defineComponent({
   },
 })
 
+/* Image upload widget */
+const ImageUploadField = defineComponent({
+  props: { preview: String },
+  emits: ['change', 'clear'],
+  setup(props, { emit }) {
+    const IconComp = resolveComponent('Icon')
+    const uploadIcon = () => h('div', { class: 'flex flex-col items-center gap-1.5 text-muted-foreground' }, [
+      h(IconComp as any, { name: 'lucide:upload', size: '20' }),
+      h('span', { class: 'text-xs font-medium' }, 'Нажмите для загрузки'),
+      h('span', { class: 'text-[11px] text-muted-foreground/70' }, 'PNG, JPG, WebP'),
+    ])
+    return () => h('div', { class: 'space-y-1.5' }, [
+      h('label', {
+        class: 'relative flex items-center justify-center w-full h-36 rounded-lg border-2 border-dashed border-border hover:border-primary/50 cursor-pointer transition-colors bg-muted/20 overflow-hidden group',
+      }, [
+        props.preview
+          ? h('img', { src: props.preview, class: 'absolute inset-0 w-full h-full object-contain p-2' })
+          : uploadIcon(),
+        props.preview
+          ? h('div', { class: 'absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center' },
+              h('span', { class: 'text-white text-xs font-medium' }, 'Изменить'))
+          : null,
+        h('input', {
+          type: 'file',
+          accept: 'image/*',
+          class: 'sr-only',
+          onChange: (e: Event) => emit('change', e),
+        }),
+      ]),
+      props.preview
+        ? h('button', {
+            type: 'button',
+            class: 'text-[11px] text-destructive hover:underline',
+            onClick: () => emit('clear'),
+          }, 'Удалить фото')
+        : null,
+    ])
+  },
+})
+
 /* ───── options ───── */
 const sections = [
   { id: 'section-basic',   label: 'Основная' },
@@ -626,17 +659,79 @@ onMounted(() => {
   onUnmounted(() => observer.disconnect())
 })
 
-/* ───── form state ───── */
-const photoInput = ref('')
+/* ───── file upload state ───── */
+const heroPhotoFile = ref<File | null>(null)
+const heroPhotoPreview = ref('')
+const middleBannerFile = ref<File | null>(null)
+const middleBannerPreview = ref('')
+const parametrsPhotoFile = ref<File | null>(null)
+const parametrsPhotoPreview = ref('')
+const footerBannerFile = ref<File | null>(null)
+const footerBannerPreview = ref('')
 
-function addPhoto() {
-  const url = photoInput.value.trim()
-  if (url) {
-    form.value.characteristics.photos.push(url)
-    photoInput.value = ''
-  }
+type GalleryItem = { url?: string; file?: File; preview: string }
+const gallery = ref<GalleryItem[]>([])
+
+function pickFile(e: Event, setFile: (f: File) => void, setPreview: (u: string) => void) {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  setFile(file)
+  setPreview(URL.createObjectURL(file))
+  ;(e.target as HTMLInputElement).value = ''
 }
 
+function onHeroPhotoChange(e: Event) {
+  pickFile(e, f => { heroPhotoFile.value = f }, u => { heroPhotoPreview.value = u })
+}
+function clearHeroPhoto() {
+  if (heroPhotoFile.value) URL.revokeObjectURL(heroPhotoPreview.value)
+  heroPhotoFile.value = null
+  heroPhotoPreview.value = ''
+}
+
+function onMiddleBannerChange(e: Event) {
+  pickFile(e, f => { middleBannerFile.value = f }, u => { middleBannerPreview.value = u })
+}
+function clearMiddleBanner() {
+  if (middleBannerFile.value) URL.revokeObjectURL(middleBannerPreview.value)
+  middleBannerFile.value = null
+  middleBannerPreview.value = ''
+}
+
+function onParametrsPhotoChange(e: Event) {
+  pickFile(e, f => { parametrsPhotoFile.value = f }, u => { parametrsPhotoPreview.value = u })
+}
+function clearParametrsPhoto() {
+  if (parametrsPhotoFile.value) URL.revokeObjectURL(parametrsPhotoPreview.value)
+  parametrsPhotoFile.value = null
+  parametrsPhotoPreview.value = ''
+}
+
+function onFooterBannerChange(e: Event) {
+  pickFile(e, f => { footerBannerFile.value = f }, u => { footerBannerPreview.value = u })
+}
+function clearFooterBanner() {
+  if (footerBannerFile.value) URL.revokeObjectURL(footerBannerPreview.value)
+  footerBannerFile.value = null
+  footerBannerPreview.value = ''
+}
+
+function addGalleryFiles(e: Event) {
+  const files = (e.target as HTMLInputElement).files
+  if (!files) return
+  for (const file of Array.from(files)) {
+    gallery.value.push({ file, preview: URL.createObjectURL(file) })
+  }
+  ;(e.target as HTMLInputElement).value = ''
+}
+
+function removeGalleryItem(i: number) {
+  const item = gallery.value[i]
+  if (item.file) URL.revokeObjectURL(item.preview)
+  gallery.value.splice(i, 1)
+}
+
+/* ───── form state ───── */
 const emptyForm = () => ({
   model_name: '',
   slug: '',
@@ -648,17 +743,15 @@ const emptyForm = () => ({
   buy_button_link: '',
   uzum_button_link: '',
   video: '',
-  footer_banner_image: '',
-  hero: { photo: '', description: '' },
+  hero: { description: '' },
   characteristics: {
-    photos: [] as string[],
     items: [] as { key: string; value: string }[],
   },
   parametrs: {
     type: 'simple' as 'simple' | 'gradient',
-    data: { photo: '', color1: '', color2: '', items: [] as { title: string; value: string }[] },
+    data: { color1: '', color2: '', items: [] as { title: string; value: string }[] },
   },
-  middle_banner: { image: '', title: '', buy_button: false },
+  middle_banner: { title: '', buy_button: false },
 })
 
 const form = ref(emptyForm())
@@ -687,12 +780,19 @@ onMounted(async () => {
         buy_button_link: product.buy_button_link ?? '',
         uzum_button_link: product.uzum_button_link ?? '',
         video: product.video ?? '',
-        footer_banner_image: product.footer_banner_image ?? '',
-        hero: product.hero ?? { photo: '', description: '' },
-        characteristics: product.characteristics ?? { photos: [], items: [] },
-        parametrs: product.parametrs ?? { type: 'simple', data: { photo: '', color1: '', color2: '', items: [] } },
-        middle_banner: product.middle_banner ?? { image: '', title: '', buy_button: false },
+        hero: { description: product.hero?.description ?? '' },
+        characteristics: { items: product.characteristics?.items ?? [] },
+        parametrs: product.parametrs ?? { type: 'simple', data: { color1: '', color2: '', items: [] } },
+        middle_banner: {
+          title: product.middle_banner?.title ?? '',
+          buy_button: product.middle_banner?.buy_button ?? false,
+        },
       }
+      heroPhotoPreview.value = product.hero?.photo ?? ''
+      middleBannerPreview.value = product.middle_banner?.image ?? ''
+      parametrsPhotoPreview.value = product.parametrs?.data?.photo ?? ''
+      footerBannerPreview.value = product.footer_banner_image ?? ''
+      gallery.value = (product.characteristics?.photos ?? []).map((url: string) => ({ url, preview: url }))
     }
   } catch (e) {
     console.error('Ошибка загрузки продукта:', e)
@@ -702,13 +802,49 @@ onMounted(async () => {
 })
 
 /* ───── submit ───── */
-const { execute, pending: createPending, error: createError } = useApiService({ immediate: false }).Phone.PhoneController_create(form)
-
+const createPending = ref(false)
+const createError = ref<any>(null)
 const editPending = ref(false)
 const editError = ref<any>(null)
 
 const isPending = computed(() => isEdit.value ? editPending.value : createPending.value)
 const displayError = computed(() => isEdit.value ? editError.value : createError.value)
+
+function buildFormData() {
+  const fd = new FormData()
+  const f = form.value
+
+  fd.append('model_name', f.model_name)
+  fd.append('slug', f.slug)
+  fd.append('description', f.description)
+  fd.append('price', String(f.price))
+  fd.append('category', String(f.category))
+  fd.append('phone_type', f.phone_type)
+  fd.append('is_new', String(f.is_new))
+  fd.append('buy_button_link', f.buy_button_link)
+  fd.append('uzum_button_link', f.uzum_button_link)
+  fd.append('video', f.video)
+  fd.append('hero_description', f.hero.description)
+  fd.append('middle_banner_title', f.middle_banner.title)
+  fd.append('middle_banner_buy_button', String(f.middle_banner.buy_button))
+  fd.append('characteristics_items', JSON.stringify(f.characteristics.items))
+  fd.append('parametrs_type', f.parametrs.type)
+  fd.append('parametrs_color1', f.parametrs.data.color1)
+  fd.append('parametrs_color2', f.parametrs.data.color2)
+  fd.append('parametrs_items', JSON.stringify(f.parametrs.data.items))
+
+  if (heroPhotoFile.value) fd.append('hero_photo', heroPhotoFile.value)
+  if (middleBannerFile.value) fd.append('middle_banner_image', middleBannerFile.value)
+  if (parametrsPhotoFile.value) fd.append('parametrs_photo', parametrsPhotoFile.value)
+  if (footerBannerFile.value) fd.append('footer_banner_image', footerBannerFile.value)
+
+  gallery.value.forEach(item => {
+    if (item.file) fd.append('photos', item.file)
+    // else if (item.url) fd.append('existing_photos', item.url)
+  })
+
+  return fd
+}
 
 function fillTestData() {
   form.value = {
@@ -722,17 +858,8 @@ function fillTestData() {
     buy_button_link: 'https://ajib.uz/buy/i25-pro',
     uzum_button_link: 'https://uzum.uz/ajib-i25-pro',
     video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-    footer_banner_image: 'https://picsum.photos/seed/banner/1200/400',
-    hero: {
-      photo: 'https://picsum.photos/seed/hero/800/600',
-      description: 'Переосмысли возможности. Ajib i25 Pro — мощь в твоих руках.',
-    },
+    hero: { description: 'Переосмысли возможности. Ajib i25 Pro — мощь в твоих руках.' },
     characteristics: {
-      photos: [
-        'https://picsum.photos/seed/p1/400/400',
-        'https://picsum.photos/seed/p2/400/400',
-        'https://picsum.photos/seed/p3/400/400',
-      ],
       items: [
         { key: 'Процессор', value: 'Ajib A2 Bionic, 3.2 ГГц' },
         { key: 'Оперативная память', value: '12 ГБ' },
@@ -747,7 +874,6 @@ function fillTestData() {
     parametrs: {
       type: 'gradient',
       data: {
-        photo: 'https://picsum.photos/seed/param/600/600',
         color1: '#6366f1',
         color2: '#8b5cf6',
         items: [
@@ -758,7 +884,6 @@ function fillTestData() {
       },
     },
     middle_banner: {
-      image: 'https://picsum.photos/seed/mid/1200/500',
       title: 'Ajib i25 Pro — Следующий уровень',
       buy_button: true,
     },
@@ -766,16 +891,13 @@ function fillTestData() {
 }
 
 async function onSubmit() {
+  const fd = buildFormData()
+
   if (isEdit.value) {
     editPending.value = true
     editError.value = null
     try {
-      await $fetch(`/api/v1/phone/${props.id}`, {
-        method: 'PATCH',
-        body: form.value,
-        baseURL: config.public.apiBase,
-        headers: { Authorization: `Bearer ${localStorage.getItem('auth:access')}` },
-      })
+      await useApiService({body: fd}).Phone.PhoneController_update(props.id as string, fd)
       navigateTo('/admin/products')
     } catch (e) {
       editError.value = e
@@ -783,8 +905,16 @@ async function onSubmit() {
       editPending.value = false
     }
   } else {
-    await execute()
-    if (!createError.value) navigateTo('/admin/products')
+    createPending.value = true
+    createError.value = null
+    try {
+      await useApiService({body: fd}).Phone.PhoneController_create()
+      navigateTo('/admin/products')
+    } catch (e) {
+      createError.value = e
+    } finally {
+      createPending.value = false
+    }
   }
 }
 </script>

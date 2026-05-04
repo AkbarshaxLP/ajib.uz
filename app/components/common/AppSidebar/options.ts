@@ -1,4 +1,4 @@
-import { BookOpen, Bot, Settings2, SquareTerminal, Command } from 'lucide-vue-next'
+import { BookOpen, Bot, Settings2, SquareTerminal, Command, Tag } from 'lucide-vue-next'
 
 export const options = {
   head: {
@@ -13,15 +13,14 @@ export const options = {
   },
   navMain: [
     {
-      title: 'Дашборд',
-      url: '/admin/dashboard',
-      icon: SquareTerminal,
-      isActive: true,
-    },
-    {
       title: 'Продукты',
       url: '/admin/products',
       icon: Bot,
+    },
+    {
+      title: 'Категории',
+      url: '/admin/categories',
+      icon: Tag,
     },
     {
       title: 'Главная страница',
