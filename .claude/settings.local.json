@@ -14,7 +14,11 @@
       "Bash(npx nuxi:*)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/products/i25)",
       "Bash(node:*)",
-      "WebFetch(domain:ajib.uz)"
+      "WebFetch(domain:ajib.uz)",
+      "Bash(rm \"D:\\\\WEB3\\\\ajib.uz\\\\app\\\\pages\\\\admin\\\\categories\\\\[id]\\\\edit.vue\")",
+      "Bash(rmdir \"D:\\\\WEB3\\\\ajib.uz\\\\app\\\\pages\\\\admin\\\\categories\\\\[id]\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ],
     "deny": [],
     "ask": []

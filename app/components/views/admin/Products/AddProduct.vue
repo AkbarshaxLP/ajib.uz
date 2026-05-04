@@ -109,15 +109,9 @@
               </div>
             </div>
             <div class="p-5 space-y-4">
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 gap-4">
                 <field-group label="Название модели" required>
                   <Input v-model="form.model_name" placeholder="Ajib i25" required />
-                </field-group>
-                <field-group label="Slug" required>
-                  <div class="relative">
-                    <Input v-model="form.slug" placeholder="ajib-i25" class="pl-7" required />
-                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/50 text-xs">/</span>
-                  </div>
                 </field-group>
               </div>
 
@@ -130,8 +124,8 @@
                 </field-group>
                 <field-group label="Категория" required>
                   <Select
-                    :model-value="form.category ? String(form.category) : ''"
-                    @update:model-value="val => form.category = Number(val)"
+                    :model-value="form.category_id ? String(form.category_id) : ''"
+                    @update:model-value="val => form.category_id = Number(val)"
                     required
                   >
                     <SelectTrigger class="w-full">
@@ -734,10 +728,9 @@ function removeGalleryItem(i: number) {
 /* ───── form state ───── */
 const emptyForm = () => ({
   model_name: '',
-  slug: '',
   description: '',
   price: '',
-  category: 1,
+  category_id: '',
   phone_type: 'smartphone' as 'smartphone' | 'push_button',
   is_new: false,
   buy_button_link: '',
@@ -771,10 +764,9 @@ onMounted(async () => {
     if (product) {
       form.value = {
         model_name: product.model_name ?? '',
-        slug: product.slug ?? '',
         description: product.description ?? '',
         price: product.price ?? '',
-        category: product.category ?? 1,
+        category_id: product.category?.id ?? '',
         phone_type: product.phone_type ?? 'smartphone',
         is_new: product.is_new ?? false,
         buy_button_link: product.buy_button_link ?? '',
@@ -815,10 +807,9 @@ function buildFormData() {
   const f = form.value
 
   fd.append('model_name', f.model_name)
-  fd.append('slug', f.slug)
   fd.append('description', f.description)
   fd.append('price', String(f.price))
-  fd.append('category', String(f.category))
+  fd.append('category_id', String(f.category_id))
   fd.append('phone_type', f.phone_type)
   fd.append('is_new', String(f.is_new))
   fd.append('buy_button_link', f.buy_button_link)
@@ -827,7 +818,7 @@ function buildFormData() {
   fd.append('hero_description', f.hero.description)
   fd.append('middle_banner_title', f.middle_banner.title)
   fd.append('middle_banner_buy_button', String(f.middle_banner.buy_button))
-  fd.append('characteristics_items', JSON.stringify(f.characteristics.items))
+  fd.append('characteristics_items', JSON.stringify({ items: f.characteristics.items }))
   fd.append('parametrs_type', f.parametrs.type)
   fd.append('parametrs_color1', f.parametrs.data.color1)
   fd.append('parametrs_color2', f.parametrs.data.color2)
@@ -849,10 +840,9 @@ function buildFormData() {
 function fillTestData() {
   form.value = {
     model_name: 'Ajib i25 Pro',
-    slug: 'ajib-i25-pro',
     description: 'Флагманский смартфон нового поколения с мощным процессором и камерой 108 МП. Идеален для работы и творчества.',
     price: '1 299 000',
-    category: 1,
+    category_id: 1,
     phone_type: 'smartphone',
     is_new: true,
     buy_button_link: 'https://ajib.uz/buy/i25-pro',
