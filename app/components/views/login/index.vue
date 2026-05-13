@@ -19,17 +19,20 @@
             </div>
             <Input id="password" v-model="form.password" type="password" required />
           </div>
-          <Button type="submit" class="w-full" @click="login">Войти</Button>
+          <Button type="submit" :disabled="isLoading" class="w-full" @click="login">Войти</Button>
+          <p v-if="isError" class="text-red-500">Неверный логин или пароль</p>
         </div>
       </CardContent>
     </Card>
-    access {{ access }}
   </div>
 </template>
 
 <script lang="ts" setup>
 
-const { access } = useAuth()
+const router = useRouter();
+
+const isError = ref(false);
+const isLoading = ref(false);
 
 const form = ref({
   login: '',
@@ -37,6 +40,17 @@ const form = ref({
 })
 
 async function login() {
-  await useAuth().loginAndGetMe(form.value)
+
+  isError.value = false;
+  isLoading.value = true;
+
+  const { data, status } = await useApiService().Auth.AuthController_login(form.value)
+  if (status.value === 'success') {
+    localStorage.setItem('auth:access', data.value?.access_token);
+    router.push('/admin/products');
+  } else {
+    isError.value = true
+  }
+  isLoading.value = false;
 }
 </script>
