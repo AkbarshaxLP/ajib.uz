@@ -14,12 +14,12 @@
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b bg-muted/40">
-            <th class="px-4 py-3 text-left font-medium text-muted-foreground">ID</th>
+            <th class="px-4 py-3 text-left font-medium text-muted-foreground w-[50px]">ID</th>
             <th class="px-4 py-3 text-left font-medium text-muted-foreground">Модель</th>
             <th class="px-4 py-3 text-left font-medium text-muted-foreground">Цена</th>
             <th class="px-4 py-3 text-left font-medium text-muted-foreground">Тип</th>
             <th class="px-4 py-3 text-left font-medium text-muted-foreground">Новинка</th>
-            <th class="px-4 py-3 text-left font-medium text-muted-foreground">Действия</th>
+            <th class="px-4 py-3 font-medium text-muted-foreground w-[100px] text-center">Действия</th>
           </tr>
         </thead>
         <tbody>

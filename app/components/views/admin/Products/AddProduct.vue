@@ -815,14 +815,20 @@ function buildFormData() {
   fd.append('buy_button_link', f.buy_button_link)
   fd.append('uzum_button_link', f.uzum_button_link)
   fd.append('video', f.video)
-  fd.append('hero_description', f.hero.description)
-  fd.append('middle_banner_title', f.middle_banner.title)
-  fd.append('middle_banner_buy_button', String(f.middle_banner.buy_button))
+  fd.append('hero', JSON.stringify({ description: f.hero.description }))
+  fd.append('middle_banner', JSON.stringify({ title: f.middle_banner.title, buy_button: f.middle_banner.buy_button }))
   fd.append('characteristics_items', JSON.stringify({ items: f.characteristics.items }))
-  fd.append('parametrs_type', f.parametrs.type)
-  fd.append('parametrs_color1', f.parametrs.data.color1)
-  fd.append('parametrs_color2', f.parametrs.data.color2)
-  fd.append('parametrs_items', JSON.stringify(f.parametrs.data.items))
+
+  const parametrsPayload = {
+    type: f.parametrs.type,
+    data: {
+      color1: f.parametrs.data.color1,
+      color2: f.parametrs.data.color2,
+      photo: parametrsPhotoFile.value ? '' : (parametrsPhotoPreview.value || ''),
+      items: f.parametrs.data.items,
+    },
+  }
+  fd.append('parametrs', JSON.stringify(parametrsPayload))
 
   if (heroPhotoFile.value) fd.append('hero_photo', heroPhotoFile.value)
   if (middleBannerFile.value) fd.append('middle_banner_image', middleBannerFile.value)
@@ -887,7 +893,7 @@ async function onSubmit() {
     editPending.value = true
     editError.value = null
     try {
-      await useApiService({body: fd}).Phone.PhoneController_update(props.id as string, fd)
+      await useApiService({ immediate: true, body: fd }).Phone.PhoneController_update(props.id as string | number, fd as any)
       navigateTo('/admin/products')
     } catch (e) {
       editError.value = e
@@ -898,7 +904,7 @@ async function onSubmit() {
     createPending.value = true
     createError.value = null
     try {
-      await useApiService({body: fd}).Phone.PhoneController_create()
+      await useApiService({ immediate: true, body: fd }).Phone.PhoneController_create(fd as any)
       navigateTo('/admin/products')
     } catch (e) {
       createError.value = e

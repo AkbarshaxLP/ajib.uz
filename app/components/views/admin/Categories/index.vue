@@ -12,9 +12,9 @@
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b bg-muted/40">
-            <th class="px-4 py-3 text-left font-medium text-muted-foreground">ID</th>
+            <th class="px-4 py-3 text-left font-medium text-muted-foreground w-[50px]">ID</th>
             <th class="px-4 py-3 text-left font-medium text-muted-foreground">Название</th>
-            <th class="px-4 py-3 text-left font-medium text-muted-foreground">Действия</th>
+            <th class="px-4 py-3 text-center font-medium text-muted-foreground w-[100px]">Действия</th>
           </tr>
         </thead>
         <tbody>

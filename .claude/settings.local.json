@@ -18,7 +18,8 @@
       "Bash(rm \"D:\\\\WEB3\\\\ajib.uz\\\\app\\\\pages\\\\admin\\\\categories\\\\[id]\\\\edit.vue\")",
       "Bash(rmdir \"D:\\\\WEB3\\\\ajib.uz\\\\app\\\\pages\\\\admin\\\\categories\\\\[id]\")",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ],
     "deny": [],
     "ask": []
