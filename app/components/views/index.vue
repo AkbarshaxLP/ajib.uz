@@ -1,39 +1,40 @@
 <template>
-  <div class="homepage">
-    <MainHeader />
-    <main style="padding-top: 70px;">
-      <MainHero />
-      <MainProducts />
-      <MainFullBanner :image="banner1" />
-      <MainFullBanner :image="banner2" />
-      <MainCategories />
-    </main>
-    <div v-scroll-animate="'fade-up'">
-      <MainNewsletter />
-      <MainFooter />
-    </div>
-  </div>
+  <main style="padding-top: 70px;">
+    <MainHero v-if="heroSlides.length" :slides="heroSlides" />
+    <MainProducts v-if="newPhones.length" :products="newPhones" />
+    <MainFullBanner v-if="middleBanner" :image="middleBanner" />
+    <MainFullBanner v-if="footerBanner" :image="footerBanner" />
+    <MainCategories />
+  </main>
 </template>
 
 <script setup lang="ts">
-import MainHeader from './main-page/MainHeader.vue'
 import MainHero from './main-page/MainHero.vue'
 import MainProducts from './main-page/MainProducts.vue'
 import MainFullBanner from './main-page/MainFullBanner.vue'
 import MainCategories from './main-page/MainCategories.vue'
-import MainNewsletter from './main-page/MainNewsletter.vue'
-import MainFooter from './main-page/MainFooter.vue'
 
-const banner1 = 'https://ajib.uz/wp-content/uploads/2024/10/%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F-%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C-10-scaled.webp'
-const banner2 = 'https://ajib.uz/wp-content/uploads/2024/10/%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F-%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C-9.webp'
+const { data: mainPageData } = useApiService().Main_Page.MainPageController_get()
+
+const heroSlides = computed(() => {
+  const arr = (mainPageData.value as any)?.hero_banner ?? []
+  return arr.map((b: any, i: number) => ({
+    id: b.model_id ?? i,
+    banner: b.image ?? '',
+    alt: b.model_name ?? '',
+  }))
+})
+
+const newPhones = computed(() => {
+  const arr = (mainPageData.value as any)?.new_phones ?? []
+  return arr.map((p: any, i: number) => ({
+    id: p.phone_id ?? i,
+    name: p.model_name ?? '',
+    img: p.image ?? '',
+    href: p.phone_id ? `/products/${p.phone_id}` : '#',
+  }))
+})
+
+const middleBanner = computed(() => (mainPageData.value as any)?.banners?.middle ?? '')
+const footerBanner = computed(() => (mainPageData.value as any)?.banners?.footer ?? '')
 </script>
-
-<style scoped>
-.homepage {
-  font-family: 'Inter', sans-serif;
-  background: #ebedec;
-  color: #111;
-  overflow: hidden;
-  min-height: 100vh;
-}
-</style>

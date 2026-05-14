@@ -32,7 +32,7 @@
 
       <swiper-container ref="swiperEl" init="false" class="products-swiper">
         <swiper-slide
-          v-for="(p, i) in products"
+          v-for="(p, i) in AJIB_PRODUCTS"
           :key="p.id"
           class="product-slide"
         >
@@ -47,16 +47,19 @@
 import { ref } from 'vue'
 import ProductCard from './ProductCard.vue'
 
-interface Product {
-  id: string | number
-  name: string
-  img: string
-  href?: string
-}
-
-const props = defineProps<{
-  products: Product[]
-}>()
+const AJIB_PRODUCTS = [
+  { id: 1, name: 'ajib i10 Series', img: 'https://ajib.uz/wp-content/uploads/2025/03/photo_2025-03-24_10-22-54-768x768.jpg', href: '#' },
+  { id: 2, name: 'ajib X1 Series', img: 'https://ajib.uz/wp-content/uploads/2024/10/main-menu-images-8-768x768.webp', href: '#' },
+  { id: 3, name: 'ajib i1 Series', img: 'https://ajib.uz/wp-content/uploads/2024/10/main-menu-images-1-768x768.webp', href: '#' },
+  { id: 4, name: 'ajib Style', img: 'https://ajib.uz/wp-content/uploads/2024/10/1-9-768x768.webp', href: '#' },
+  { id: 5, name: 'ajib Case', img: 'https://ajib.uz/wp-content/uploads/2024/10/4-6-768x768.webp', href: '#' },
+  { id: 6, name: 'ajib 5010', img: 'https://ajib.uz/wp-content/uploads/2024/10/main-menu-images-7-768x768.webp', href: '#' },
+  { id: 7, name: 'ajib 3010', img: 'https://ajib.uz/wp-content/uploads/2024/10/2-7-768x768.webp', href: '#' },
+  { id: 8, name: 'ajib 3011', img: 'https://ajib.uz/wp-content/uploads/2024/10/3-8-768x768.webp', href: '#' },
+  { id: 9, name: 'ajib 1030', img: 'https://ajib.uz/wp-content/uploads/2024/10/main-menu-images-6-768x768.webp', href: '#' },
+  { id: 10, name: 'ajib 1010', img: 'https://ajib.uz/wp-content/uploads/2024/10/grey-2000-1-1-768x768.webp', href: '#' },
+  { id: 11, name: 'ajib Class', img: 'https://ajib.uz/wp-content/uploads/2024/12/%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F-%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C-5-768x768.png', href: '#' },
+]
 
 const swiperEl = ref(null)
 

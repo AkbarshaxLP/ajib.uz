@@ -2,7 +2,7 @@
   <section class="hero-section">
     <div class="hero-wrap">
       <swiper-container ref="swiperEl" init="false" class="hero-swiper" @swiperslidechange="onSlideChange">
-        <swiper-slide v-for="slide in slides" :key="slide.id">
+        <swiper-slide v-for="slide in HERO_SLIDES" :key="slide.id">
           <img :src="slide.banner" :alt="slide.alt" class="hero-img" />
         </swiper-slide>
       </swiper-container>
@@ -10,7 +10,7 @@
       <!-- Dots -->
       <div class="hero-dots">
         <button
-          v-for="(_, i) in slides"
+          v-for="(_, i) in HERO_SLIDES"
           :key="i"
           :class="['hero-dot', { active: currentIndex === i }]"
           @click="instance?.slideToLoop(i)"
@@ -35,15 +35,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-interface HeroSlide {
-  id: string | number
-  banner: string
-  alt?: string
-}
-
-const props = defineProps<{
-  slides: HeroSlide[]
-}>()
+const HERO_SLIDES = [
+  { id: 1, banner: 'https://ajib.uz/wp-content/uploads/2025/02/main-site-i25-%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F.jpg', alt: 'ajib i25 Series' },
+  { id: 2, banner: 'https://ajib.uz/wp-content/uploads/2024/12/2560x1097-UZUM-BANNER-ajib-series.png', alt: 'ajib Series' },
+]
 
 const swiperEl = ref(null)
 const currentIndex = ref(0)

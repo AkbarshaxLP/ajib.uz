@@ -149,30 +149,46 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-type NavChild = { label: string; href: string }
-type NavItem = { label: string; href: string; children?: NavChild[] }
+const NAV_ITEMS = [
+  {
+    label: 'ajib', href: '#',
+    children: [
+      { label: 'ajib X1', href: '#' }, { label: 'ajib flip', href: '#' },
+      { label: 'ajib Style', href: '#' }, { label: 'ajib Case', href: '#' },
+      { label: 'ajib Class', href: '#' }, { label: 'ajib i1', href: '#' },
+      { label: 'ajib i10 series', href: '#' }, { label: 'ajib i15 series', href: '#' },
+      { label: 'ajib i25 series', href: '/products/i25' }, { label: 'ajib 5010', href: '#' },
+      { label: 'ajib 3010', href: '#' }, { label: 'ajib 3011', href: '#' },
+      { label: 'ajib 1030', href: '#' }, { label: 'ajib 1010', href: '#' },
+    ],
+  },
+  { label: 'Premier', href: '#', children: [{ label: 'Premier P50', href: '#' }] },
+  {
+    label: 'Corn', href: '#',
+    children: [
+      { label: 'Corn M283', href: '#' }, { label: 'Corn M282', href: '#' },
+      { label: 'Corn F282', href: '#' }, { label: 'Corn S281', href: '#' },
+      { label: 'Corn M243', href: '#' }, { label: 'Corn B241', href: '#' },
+      { label: 'Corn f281', href: '#' }, { label: 'Corn POWERC', href: '#' },
+      { label: 'Corn B183', href: '#' },
+    ],
+  },
+  { label: 'Hamkorlik uchun', href: '#' },
+]
 
-const { data: categoriesData } = useApiService().Dictionary.CategoryController_findAll()
-const { data: phonesData } = useApiService().Phone.PhoneController_findAll()
-
-const categories = computed<any[]>(() => (categoriesData.value as any[] | null) ?? [])
-const phones = computed<any[]>(() => (phonesData.value as any[] | null) ?? [])
-
-const NAV_ITEMS = computed<NavItem[]>(() => {
-  const items: NavItem[] = categories.value.map((cat) => {
-    const children: NavChild[] = phones.value
-      .filter((p) => (p.category?.id ?? p.category_id) === cat.id)
-      .map((p) => ({
-        label: p.model_name ?? '',
-        href: `/products/${p.id}`,
-      }))
-    const item: NavItem = { label: cat.name, href: '#' }
-    if (children.length) item.children = children
-    return item
-  })
-  items.push({ label: 'Hamkorlik uchun', href: '#' })
-  return items
-})
+const SEARCH_DATA = [
+  { id: 1, name: 'ajib i25 Pro', price: "1 799 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2024/10/main-menu-images-8-768x768.webp' },
+  { id: 2, name: 'ajib i25', price: "1 399 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2025/01/main-site2-i25-300x300.jpg' },
+  { id: 3, name: 'ajib i15 Pro', price: "1 299 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2025/01/main-site2-i15-300x300.jpg' },
+  { id: 4, name: 'ajib i10 Pro', price: "899 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2025/03/photo_2025-03-24_10-22-54-768x768.jpg' },
+  { id: 5, name: 'ajib X1', price: "1 199 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2024/10/main-menu-images-8-768x768.webp' },
+  { id: 6, name: 'ajib Style', price: "449 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2024/10/1-9-768x768.webp' },
+  { id: 7, name: 'ajib Case', price: "349 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2024/10/4-6-768x768.webp' },
+  { id: 8, name: 'ajib 5010', price: "279 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2024/10/main-menu-images-7-768x768.webp' },
+  { id: 9, name: 'Premier P50', price: "2 599 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2024/10/main-menu-images-8-768x768.webp' },
+  { id: 10, name: 'Corn M283', price: "189 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2024/10/M283-768x768.webp' },
+  { id: 11, name: 'Corn POWERC', price: "229 000 So'm", img: 'https://ajib.uz/wp-content/uploads/2024/10/POWERC-768x768.webp' },
+]
 
 const scrolled = ref(false)
 const openMenu = ref<string | null>(null)
@@ -184,19 +200,11 @@ const searchWrapEl = ref<HTMLElement | null>(null)
 const searchFocused = ref(false)
 const searchVal = ref('')
 
-const searchResults = computed(() => {
-  const q = searchVal.value.trim().toLowerCase()
-  if (!q) return []
-  return phones.value
-    .filter((p) => (p.model_name ?? '').toLowerCase().includes(q))
-    .slice(0, 6)
-    .map((p) => ({
-      id: p.id,
-      name: p.model_name ?? '',
-      price: p.price ? `${p.price} So'm` : '',
-      img: p.hero?.photo ?? p.characteristics?.photos?.[0] ?? '',
-    }))
-})
+const searchResults = computed(() =>
+  searchVal.value.trim()
+    ? SEARCH_DATA.filter(p => p.name.toLowerCase().includes(searchVal.value.toLowerCase())).slice(0, 6)
+    : []
+)
 const showDropdown = computed(() => searchFocused.value && searchVal.value.trim().length > 0)
 const selectResult = (name: string) => { searchVal.value = name; searchFocused.value = false }
 
