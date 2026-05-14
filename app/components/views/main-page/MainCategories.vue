@@ -8,10 +8,10 @@
         </div>
       </div>
       <div class="categories-grid">
-        <a
+        <NuxtLink
           v-for="(cat, i) in CATEGORIES"
           :key="cat.name"
-          href="#"
+          :to="`/devices/${cat.type}`"
           :class="['category-card', { 'category-card--hovered': hoveredCat === i }]"
           @mouseenter="hoveredCat = i"
           @mouseleave="hoveredCat = null"
@@ -35,7 +35,7 @@
               </svg>
             </span>
           </div>
-        </a>
+        </NuxtLink>
       </div>
     </div>
   </section>
@@ -50,12 +50,14 @@ const CATEGORIES = [
     label: 'Ajib Mobile',
     desc: 'Zamonaviy smartfonlar eng yaxshi narxlarda',
     img: 'https://ajib.uz/wp-content/uploads/2024/10/sp.webp',
+    type: 'smartphone',
   },
   {
     name: 'Tugmali telefonlar',
     label: 'Ajib Mobile',
     desc: 'Ishonchli va uzoq ishlaydi, oddiy foydalanish uchun',
     img: 'https://ajib.uz/wp-content/uploads/2024/10/tp.webp',
+    type: 'push_button',
   },
 ]
 

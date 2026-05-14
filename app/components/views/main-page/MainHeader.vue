@@ -166,7 +166,7 @@ const NAV_ITEMS = computed<NavItem[]>(() => {
         label: p.model_name ?? '',
         href: `/products/${p.id}`,
       }))
-    const item: NavItem = { label: cat.name, href: '#' }
+    const item: NavItem = { label: cat.name, href: `/category/${cat.id}` }
     if (children.length) item.children = children
     return item
   })
